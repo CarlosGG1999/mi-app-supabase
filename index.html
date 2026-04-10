@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro Estudiantes</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>Registrar Estudiante</h1>
+    <form id="registroForm">
+        <input type="text" placeholder="Nombre Estudiante" id="nombre" required>
+        <input type="text" placeholder="Carrera" id="carrera" required>
+        <button type="submit">Enviar a Supabase</button>
+    </form>
+
+    <script>
+        // 2. Configuración (USA TUS DATOS AQUÍ)
+        const _supabaseUrl = 'https://ierbqujiilmrejbgiflm.supabase.co';
+        const _supabaseKey = 'TU_ANON_KEY_AQUI'; 
+        const _supabase = supabase.createClient(_supabaseUrl, _supabaseKey);
+
+        // 3. Lógica para enviar los datos
+        const form = document.getElementById('registroForm');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Evita que la página se recargue
+
+            const nombre = document.getElementById('nombre').value;
+            const carrera = document.getElementById('carrera').value;
+
+            const { data, error } = await _supabase
+                .from('estudiantes')
+                .insert([{ nombre, carrera }]);
+
+            if (error) {
+                console.error('Error:', error);
+                alert('Hubo un error al guardar');
+            } else {
+                alert('¡Estudiante registrado con éxito!');
+                form.reset(); // Limpia el formulario
+            }
+        });
+    </script>
+</body>
+</html>
